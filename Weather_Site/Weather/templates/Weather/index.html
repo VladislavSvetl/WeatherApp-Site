@@ -8,28 +8,38 @@
 
 {% block content %}
     <div class="container ml-5">
+        <div class="text-center">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h3>Укажите название города</h3><br>
+                {{ form.name }}
+                <input type="submit" name="send" value="Добавить город в избранное" class="mt-3 btn btn-primary">
+            </form>
+        </div>
+        <br><br>
+        <h2 align="center">Погода в избранных городах</h2><br>
+        {% if all_info %}
         <div class="row">
-            <div class="col-md-5 offset-1">
-                <h2>Информация о погоде</h2>
-                <div class="alert alert-info">
-                    <div class="alert text-center">
-                        <img src="http://openweathermap.org/img/w/{{ info.icon }}.png" alt="Фото погоды" class="img-thumbnail"><br><br>
-                        <h3><b>Погода в городе </b>{{ info.city }}</h3><br>
-                        <h5>Температура воздуха <b>{{ info.temp }}<sup>0</sup>С</b></h5><br>
-                        <h6>Ощущается как <b>{{ info.feels }}<sup>0</sup>С</b></h6><br>
-                        <h5>Влажность воздуха <b>{{ info.humidity }}%</b></h5><br>
-                        <h5>Скорость ветра <b>{{ info.wind_speed }} км/ч</b></h5><br>
+            {% for info in all_info %}
+            <div class="col-4 alert alert-primary">
+                <div class="row">
+                    <div class="col-8">
+                        <h5 align="center">{{ info.city }}</h5>
+                        Температура воздуха <b>{{ info.temp }}<sup>0</sup>С</b><br>
+                        Ощущается как <b>{{ info.feels }}<sup>0</sup>С</b><br>
+                        Влажность воздуха <b>{{ info.humidity }}%</b><br>
+                        Скорость ветра <b>{{ info.wind_speed }} м/с</b>
+                    </div>
+                    <div class="col-4">
+                        <img align="center" src="http://openweathermap.org/img/w/{{ info.icon }}.png" alt="Фото погоды" style="padding:30px">
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 offset-1">
-                <form action="">
-                    <h3>Укажите название города</h3>
-                    <input type="text" id="city" class="mt-3 form-control" name="city" placeholder="Введите город">
-                    <input type="submit" name="send" value="Узнать" class="mt-3 btn btn-primary">
-                </form>
-            </div>
+             {% endfor %}
         </div>
+        {% else %}
+        <h5 align="center">Избранных городов не добавлено</h5>
+        {% endif %}
     </div>
 
 {% endblock %}
